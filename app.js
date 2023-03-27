@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+var session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 const pageRoute = require('./routes/pageRoute');
 const courseRoute = require('./routes/courseRoute');
@@ -19,13 +21,25 @@ mongoose.connect('mongodb://127.0.0.1:27017/samrtedu-db')
 app.set("view engine","ejs");
 
 
+global.userIN = null;
+
 //Middlewares
 app.use(express.static("public"));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })) 
+app.use(session({
+  secret: 'my keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: 'mongodb://127.0.0.1:27017/samrtedu-db' })
+}))
 
 
 //Routes    
+app.use('*',(req,res,next)=>{
+  userIN = req.session.userID;
+  next();
+})
 app.use('/',pageRoute);
 app.use('/course',courseRoute);
 app.use('/categories',categoryRoute);

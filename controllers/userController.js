@@ -22,10 +22,14 @@ exports.loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
         let user = await User.findOne({ email });
-        let same = await bcrypt.compare(password, user.password);
-         if(same){
-             res.status(200).send('You are logged in'); 
-            }
+        if(user){
+            bcrypt.compare(password,user.password,(err,same) => {
+                if(same){
+                    req.session.userID = user._id;
+                    res.status(200).redirect('/');
+                }
+            })
+        }
     } catch (error) {
       res.status(400).json({
         status: 'fail',
@@ -33,3 +37,10 @@ exports.loginUser = async (req, res) => {
       });
     }
   }; 
+
+
+  exports.logoutUser = (req,res) =>{
+    req.session.destroy(() => {
+        res.redirect('/')
+    })
+  }
