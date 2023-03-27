@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
 
 
 exports.createUser = async (req,res) => {  
@@ -15,3 +16,20 @@ exports.createUser = async (req,res) => {
         });
     }
 } 
+
+
+exports.loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        let user = await User.findOne({ email });
+        let same = await bcrypt.compare(password, user.password);
+         if(same){
+             res.status(200).send('You are logged in'); 
+            }
+    } catch (error) {
+      res.status(400).json({
+        status: 'fail',
+        error,
+      });
+    }
+  }; 
