@@ -2,6 +2,9 @@
   "name": "smartedu",
   "version": "1.0.0",
   "description": "Education Portal",
+  "engines": {
+    "node": ">=14.20.1"
+  },
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js"
