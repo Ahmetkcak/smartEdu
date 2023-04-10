@@ -16,7 +16,7 @@ const app = express();
 
 
 //Connect DB
-mongoose.connect('mongodb://127.0.0.1:27017/samrtedu-db')
+mongoose.connect('mongodb+srv://test:test1234@smartedu-db.gmgwozs.mongodb.net/?retryWrites=true&w=majority')
   .then(() => console.log('DB Connected Successfuly'));
 
 //Template engine
